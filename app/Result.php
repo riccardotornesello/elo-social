@@ -26,7 +26,7 @@ class Result extends Model
     /**
      * Get the team that owns the result.
      */
-    public function user()
+    public function team()
     {
         return $this->belongsTo('App\Team');
     }

@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 use App\League;
@@ -59,6 +57,8 @@ class LeagueController extends Controller
 
     public function view(Request $request, League $league)
     {
+        if ($league === null) return response()->json(['error' => 'League not found'], 404);
+
         $permission = Gate::inspect('view', $league);
         if (!$permission->allowed()) {
             return response()->json(['error' => $permission->message()], 403);
@@ -69,12 +69,14 @@ class LeagueController extends Controller
 
     public function teams(Request $request, League $league)
     {
+        if ($league === null) return response()->json(['error' => 'League not found'], 404);
+
         $permission = Gate::inspect('view', $league);
         if (!$permission->allowed()) {
             return response()->json(['error' => $permission->message()], 403);
         }
 
-        return TeamResource::collection($league->teams())->response()->setStatusCode(200);
+        return TeamResource::collection($league->teams()->get())->response()->setStatusCode(200);
     }
 
     public function join(Request $request, League $league)
@@ -101,7 +103,7 @@ class LeagueController extends Controller
             'role' => 'player',
         ]);
 
-        $invite = $league->invites()->where('email',$user->email)->first();
+        $invite = $league->invites()->where('email', $user->email)->first();
         $invite->delete();
     }
 }

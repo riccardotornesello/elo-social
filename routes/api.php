@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
 
+    Route::post('/auth/login', 'SanctumController@issue');
+
     Route::prefix('leagues')->group(function () {
 
         // Leagues
@@ -38,7 +40,7 @@ Route::prefix('v1')->group(function () {
         //TODO: delete invite
 
         // League's matches
-        //Route::post('/{league}/matches', 'MatchController@create');
+        Route::post('/{league}/matches', 'MatchController@create');
         //Route::get('/{league}/matches', 'MatchController@list');
     });
 });

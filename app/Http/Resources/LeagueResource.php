@@ -17,12 +17,14 @@ class LeagueResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'team' => $this->whenPivotLoaded('team', function () {
+            'creation' => $this->created_at->toDateTimeString(),
+            'team' => $this->whenPivotLoaded('teams', function () {
                 return [
                     'id' => $this->pivot->id,
                     'name' => $this->pivot->name,
                     'rating' => $this->pivot->rating,
-                    'role' => $this->pivot->role
+                    'role' => $this->pivot->role,
+                    'join' => $this->created_at->toDateTimeString(),
                 ];
             })
         ];

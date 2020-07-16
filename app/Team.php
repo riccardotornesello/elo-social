@@ -9,6 +9,9 @@ class Team extends Pivot
     // It has an Id field
     public $incrementing = true;
 
+    // Fix for wrong Eloquent table name
+    protected $table = 'teams';
+
     /**
      * The attributes that are mass assignable.
      *
